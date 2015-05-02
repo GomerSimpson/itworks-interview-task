@@ -1,5 +1,7 @@
 package com.brest.itworks.task.gui;
 
+import com.brest.itworks.task.dao.PersonDao;
+import com.brest.itworks.task.dao.PersonDaoImpl;
 import com.brest.itworks.task.domain.Log;
 import com.brest.itworks.task.domain.Person;
 import com.brest.itworks.task.domain.Task;
@@ -16,12 +18,13 @@ import javax.persistence.Persistence;
 
 public class Main extends Application {
 
-    public static void print(Object parameter){
+    private static PersonDao personDao = new PersonDaoImpl();
+
+    private static void print(Object parameter){
         System.out.println(parameter);
     }
 
-    public static void main(String[] args) throws Exception {
-
+    private static void fillDb(){
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("persUnit");
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = null;
@@ -48,14 +51,21 @@ public class Main extends Application {
             em.persist(person1);
             em.persist(person2);
             em.persist(person3);
-        //    em.remove(em.find(Person.class, 9));
+            //em.remove(em.find(Person.class, 9));
             et.commit();
+
 
         } catch(Exception e){
             e.printStackTrace();
         }
+    }
 
-        System.out.println("test");
+    public static void main(String[] args) throws Exception {
+
+        //print(personDao.addPerson(new Person(null, "GJS4", "login4", "password4")));
+        //personDao.updatePerson(new Person(15, "GJS3", "login3", "password3"));
+        //personDao.removePerson(16);
+        print(personDao.getAllPeople().get(2).getTasks().get(1).getLogs());
 
     }
 
